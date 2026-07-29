@@ -47,7 +47,6 @@ export default defineConfig(async () => {
   const platformPlugins = isVercel
     ? (await import("nitro/vite")).nitro({
         preset: "vercel",
-        output: { dir: ".output" },
       })
     : [
         // Wrangler snapshots its log path while the Cloudflare plugin is imported.
