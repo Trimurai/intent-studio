@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./extra.css";
 
 export const metadata: Metadata = {
-  title: "Intent Studio | CEO Digital Brain",
-  description: "A strategic decision workspace for enterprise leaders.",
+  title: "IntentStudio | Enterprise Decision Intelligence",
+  description: "A role-aware Enterprise Digital Brain for decisive leadership.",
   openGraph: {
-    title: "Intent Studio | The CEO Digital Brain",
-    description: "Turn strategic intent into cited, actionable insight.",
+    title: "IntentStudio | Make every intention count.",
+    description: "Turn enterprise knowledge into focused, grounded decisions.",
     images: ["/og.png"],
   },
   twitter: {

@@ -1,126 +1,78 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 
-const initialActions = [
-  { title: "Recover the South region pipeline", detail: "8 late-stage opportunities worth ₹12.4Cr are slipping beyond quarter end.", impact: "+₹3.8Cr", owner: "Regional Sales Manager", tone: "urgent" },
-  { title: "Increase enterprise deal velocity", detail: "Discovery-to-proposal conversion is 11 pts below the best-performing segment.", impact: "+₹2.1Cr", owner: "Sales Leader", tone: "focus" },
-  { title: "Protect high-margin category share", detail: "Cloud & Data demand is rising, but win rate has fallen for two consecutive months.", impact: "+₹1.6Cr", owner: "Sales Leader", tone: "watch" },
-];
+type Role = "CEO" | "CFO" | "CSO";
+type SourceItem = { name: string; type: string; detail: string; status: string };
 
-const answers = [
-  "Revenue is growing, but the next-quarter outlook is exposed by a weak South region pipeline. Prioritize late-stage deal recovery before adding more top-of-funnel activity.",
-  "The clearest growth lever is enterprise conversion: the current proposal-to-win rate is 31%, versus 42% in the strongest segment. Focus coaching on discovery quality and executive sponsorship.",
-  "Projection risk is concentrated in 8 opportunities. Recovering just three of them would close 38% of the current gap to target.",
+const roleData: Record<Role, { name: string; title: string; lead: string; hero: string; intent: string; metrics: [string, string, string, string][]; priorities: string[]; question: string }> = {
+  CEO: { name: "Alex Morgan", title: "Chief Executive Officer", lead: "Your business is moving forward. Here is where your attention has the greatest impact.", hero: "92.6%", intent: "Grow profitable revenue", metrics: [["Revenue YTD", "₹1,842Cr", "↑ 8.4%"], ["Forecast to target", "92.6%", "₹147Cr gap"], ["Qualified pipeline", "₹624Cr", "↑ 14.2%"], ["Win rate", "34.8%", "↓ 2.1 pts"]], priorities: ["Recover South region pipeline", "Increase enterprise deal velocity", "Protect high-margin category share"], question: "Why is our forecast below target?" },
+  CFO: { name: "Priya Shah", title: "Chief Financial Officer", lead: "Capital is working harder. Focus now on the margins, cash and choices that protect the plan.", hero: "18.6%", intent: "Expand operating leverage", metrics: [["EBITDA margin", "18.6%", "↑ 1.2 pts"], ["Free cash flow", "₹286Cr", "↑ 16.8%"], ["Working capital", "42 days", "↓ 4 days"], ["Cost-to-serve", "11.4%", "↓ 0.8 pts"]], priorities: ["Release ₹32Cr from working capital", "Protect cloud delivery margin", "Reallocate underperforming spend"], question: "Where is margin pressure building?" },
+  CSO: { name: "Maya Chen", title: "Chief Strategy Officer", lead: "The portfolio is changing. Place the next bets where market momentum and distinctive capability meet.", hero: "3.4×", intent: "Win the next growth horizon", metrics: [["Strategic growth index", "3.4×", "↑ 0.6×"], ["Addressable whitespace", "₹980Cr", "↑ 21%"], ["Priority bets on-track", "7 / 9", "2 at risk"], ["Capability advantage", "74%", "↑ 5 pts"]], priorities: ["Accelerate AI services expansion", "Decide the health-tech partnership", "Protect data platform differentiation"], question: "Which strategic bet deserves more capital?" },
+};
+
+const defaultSources: SourceItem[] = [
+  { name: "FY26 operating plan", type: "Enterprise document", detail: "Strategy, targets and initiatives", status: "Ready" },
+  { name: "CRM pipeline", type: "Synthetic internal", detail: "Opportunities, stages and conversion", status: "Ready" },
+  { name: "ERP sales ledger", type: "Synthetic internal", detail: "Revenue, orders and profitability", status: "Ready" },
 ];
 
 export default function Home() {
-  const [setupOpen, setSetupOpen] = useState(false);
-  const [activeNav, setActiveNav] = useState("Overview");
+  const [screen, setScreen] = useState<"landing" | "studio">("landing");
+  const [role, setRole] = useState<Role>("CEO");
+  const [page, setPage] = useState("Command center");
+  const [setup, setSetup] = useState(false);
+  const [model, setModel] = useState("GPT-5");
+  const [sources, setSources] = useState<SourceItem[]>(defaultSources);
   const [query, setQuery] = useState("");
   const [answer, setAnswer] = useState("");
-  const [actions, setActions] = useState(initialActions);
-  const [intent, setIntent] = useState("Grow Sales");
-  const [status, setStatus] = useState("Demo profile ready");
+  const [status, setStatus] = useState("Digital Brain is active");
+  const profile = roleData[role];
+  const uploaded = sources.filter(s => s.type === "Private upload" || s.type === "Website");
 
+  function ingest(files: FileList | null) {
+    if (!files?.length) return;
+    const additions = Array.from(files).map(file => ({ name: file.name, type: "Private upload", detail: `${file.type || "Document"} · encrypted & indexed`, status: "Indexing" }));
+    setSources(old => [...additions, ...old]);
+    setStatus(`${additions.length} source${additions.length > 1 ? "s" : ""} being added to the Enterprise Digital Brain`);
+    window.setTimeout(() => setSources(old => old.map(s => additions.some(a => a.name === s.name) ? { ...s, status: "Ready" } : s)), 900);
+  }
+  function addLink(value: string) {
+    if (!value.trim()) return;
+    setSources(old => [{ name: value.replace(/^https?:\/\//, ""), type: "Website", detail: "Website content · indexed", status: "Ready" }, ...old]);
+    setStatus("Website added to the Enterprise Digital Brain");
+  }
   function ask(event: FormEvent) {
     event.preventDefault();
-    const chosen = answers[Math.floor(Math.random() * answers.length)];
-    setAnswer(chosen);
+    const sourceNames = uploaded.length ? uploaded.slice(0, 2).map(s => s.name).join(" and ") : "the operating plan and internal business signals";
+    setAnswer(`Using ${sourceNames}, ${profile.question.toLowerCase().replace("?", "")} is driven by the highest-concentration decisions in the current plan. IntentStudio recommends reviewing the top three levers before the next operating review. This answer is grounded in ${sources.length} connected sources and generated with ${model}.`);
     setQuery("");
   }
 
-  function decide(title: string, decision: string) {
-    setActions((items) => items.map((item) => item.title === title ? { ...item, detail: `${item.detail} · Marked ${decision.toLowerCase()}.` } : item));
-    setStatus(`Action ${decision.toLowerCase()}`);
-  }
-
-  return (
-    <main className="app-shell">
-      <aside className="sidebar">
-        <div className="brand"><span className="brand-mark">i</span><span>intent<br/><b>studio</b></span></div>
-        <div className="company-pill"><span className="accent-dot"/> ACCENTURE <span className="chev">⌄</span></div>
-        <nav>
-          {["Overview", "Ask Intent Studio", "Strategic Intents", "Daily Brief", "Data Sources"].map((item) => (
-            <button key={item} className={activeNav === item ? "nav-item active" : "nav-item"} onClick={() => setActiveNav(item)}>
-              <span>{item === "Overview" ? "◫" : item === "Ask Intent Studio" ? "⌁" : item === "Strategic Intents" ? "◎" : item === "Daily Brief" ? "◷" : "◌"}</span>{item}
-            </button>
-          ))}
-        </nav>
-        <div className="sidebar-bottom">
-          <div className="source-state"><span className="pulse"/> Data brain active<br/><small>Public + synthetic demo data</small></div>
-          <button className="setup-link" onClick={() => setSetupOpen(true)}>⚙ Company setup</button>
-          <div className="profile"><div className="avatar">AM</div><div><b>Alex Morgan</b><small>Chief Executive Officer</small></div><span>⌄</span></div>
-        </div>
-      </aside>
-
-      <section className="content">
-        <header className="topbar">
-          <div><p className="eyebrow">CEO DIGITAL BRAIN <span>●</span> Updated today, 08:40 IST</p><h1>Good morning, Alex.</h1><p className="subhead">Your business is moving forward. Here’s where your attention has the greatest impact.</p></div>
-          <div className="header-actions"><button className="icon-button" aria-label="Notifications">♧<i/></button><button className="setup-button" onClick={() => setSetupOpen(true)}>Customize demo <span>→</span></button></div>
-        </header>
-        {activeNav !== "Overview" && <PageView page={activeNav} onAsk={setAnswer} onStatus={setStatus} />}
-        <div className={activeNav === "Overview" ? "" : "overview-hidden"}>
-        <section className="intent-banner">
-          <div className="intent-symbol">↗</div><div className="intent-copy"><span className="eyebrow">ACTIVE STRATEGIC INTENT</span><h2>{intent}</h2><p>Focus the organization on the highest-confidence levers for sustainable revenue growth.</p></div>
-          <div className="intent-children"><span>Improve pipeline conversion</span><span>Increase average deal value</span></div>
-          <button className="intent-edit" onClick={() => setIntent(intent === "Grow Sales" ? "Improve Profits" : "Grow Sales")}>Edit intent</button>
-        </section>
-
-        <section className="metrics" aria-label="Business metrics">
-          <Metric label="REVENUE (YTD)" value="₹1,842Cr" change="↑ 8.4%" note="vs. prior year" />
-          <Metric label="FORECAST TO TARGET" value="92.6%" change="₹147Cr gap" note="Q3 target" warning />
-          <Metric label="QUALIFIED PIPELINE" value="₹624Cr" change="↑ 14.2%" note="vs. last month" />
-          <Metric label="WIN RATE" value="34.8%" change="↓ 2.1 pts" note="trailing 90 days" warning />
-        </section>
-
-        <section className="dashboard-grid">
-          <article className="card performance-card">
-            <div className="card-head"><div><span className="eyebrow">PERFORMANCE TRAJECTORY</span><h3>Revenue is ahead of plan — but momentum is softening</h3></div><button className="more">•••</button></div>
-            <div className="legend"><span><i className="line blue"/>Actual revenue</span><span><i className="line muted"/>Plan</span><span><i className="line dashed"/>Forecast</span></div>
-            <div className="chart-wrap">
-              <div className="y-axis"><span>₹2,000Cr</span><span>₹1,500Cr</span><span>₹1,000Cr</span><span>₹500Cr</span><span>₹0</span></div>
-              <svg viewBox="0 0 760 245" preserveAspectRatio="none" className="chart" role="img" aria-label="Revenue performance line chart">
-                <defs><linearGradient id="fill" x1="0" x2="0" y1="0" y2="1"><stop stopColor="#19b58a" stopOpacity=".2"/><stop offset="1" stopColor="#19b58a" stopOpacity="0"/></linearGradient></defs>
-                {[28,78,128,178,228].map(y => <line key={y} x1="0" y1={y} x2="760" y2={y} stroke="#e8eeef" strokeWidth="1"/>)}
-                <path d="M0,198 C60,190 78,168 130,166 S210,134 260,143 S350,98 410,105 S480,68 545,78 S625,55 690,65 S735,52 760,44" fill="none" stroke="#b7c5c9" strokeWidth="3" strokeDasharray="7 7"/>
-                <path d="M0,203 C42,182 75,179 110,170 S185,154 218,133 S280,125 315,116 S360,98 400,103 S456,79 488,81 S535,50 575,59" fill="none" stroke="#13a77e" strokeWidth="4"/>
-                <path d="M0,203 C42,182 75,179 110,170 S185,154 218,133 S280,125 315,116 S360,98 400,103 S456,79 488,81 S535,50 575,59 L575,245 L0,245Z" fill="url(#fill)"/>
-                <path d="M575,59 C620,67 655,81 698,74 S735,78 760,89" fill="none" stroke="#13a77e" strokeWidth="4" strokeDasharray="8 8"/>
-                <circle cx="575" cy="59" r="6" fill="#fff" stroke="#13a77e" strokeWidth="4"/>
-              </svg>
-              <div className="months"><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span></div>
-              <div className="chart-callout"><b>Forecast confidence: 78%</b><span>Based on pipeline quality & public market signals</span></div>
-            </div>
-          </article>
-
-          <article className="card action-card"><div className="card-head"><div><span className="eyebrow">DAILY PRIORITIES</span><h3>Where to focus now</h3></div><button className="text-button" onClick={() => setActiveNav("Daily Brief")}>View full brief →</button></div>
-            <div className="action-list">{actions.map((action, index) => <div className="action" key={action.title}><div className={`action-index ${action.tone}`}>0{index + 1}</div><div className="action-body"><div className="action-title"><b>{action.title}</b><strong>{action.impact}</strong></div><p>{action.detail}</p><div><span className="owner">Owner: {action.owner}</span><button onClick={() => decide(action.title, "Accepted")}>Accept</button><button className="quiet" onClick={() => decide(action.title, "Deferred")}>Defer</button></div></div></div>)}</div>
-          </article>
-        </section>
-
-        <section className="bottom-grid">
-          <article className="card regions"><div className="card-head"><div><span className="eyebrow">GROWTH HOTSPOTS</span><h3>Regional performance</h3></div><button className="more">•••</button></div><div className="region-bars">{[["North", 88, "+12.3%"], ["West", 72, "+8.8%"], ["South", 45, "−4.1%"], ["East", 61, "+6.2%"]].map(([name, width, growth]) => <div className="region" key={String(name)}><span>{name}</span><div className="bar"><i style={{width: `${width}%`}}/></div><b className={String(growth).includes("−") ? "negative" : "positive"}>{growth}</b></div>)}</div></article>
-          <article className="ask-panel"><div><span className="eyebrow">ASK INTENT STUDIO</span><h3>What would you like to understand?</h3><p>Ask about performance, projections, risks, or the actions behind your strategic intent.</p></div><form onSubmit={ask}><input value={query} onChange={e => setQuery(e.target.value)} placeholder="e.g. Why is our forecast below target?" aria-label="Ask a question"/><button aria-label="Ask question">↑</button></form>{answer && <div className="answer"><span>AI insight · sources available</span><p>{answer}</p></div>}<div className="question-chips"><button onClick={() => setAnswer(answers[0])}>What is our biggest growth risk?</button><button onClick={() => setAnswer(answers[1])}>Where should I intervene?</button></div></article>
-        </section>
-        <footer>Demo mode · Operational data is synthetic. Public facts are cited in the data-source view. <span>{status}</span></footer>
-        </div>
-      </section>
-
-      {setupOpen && <div className="modal-backdrop" role="dialog" aria-modal="true" aria-label="Customize demonstration"><div className="setup-modal"><button className="close" onClick={() => setSetupOpen(false)}>×</button><span className="eyebrow">DEMO CONFIGURATION</span><h2>Create a company digital brain</h2><p>Public company context is combined with transparently labeled synthetic operating data.</p><label>Company name<input defaultValue="Accenture"/></label><label>Official website<input defaultValue="https://www.accenture.com"/></label><div className="data-check"><span>✓</span><div><b>Prepared demo profile</b><small>Accenture public context, 24-month history, and synthetic CRM + ERP data are ready to reuse.</small></div></div><button className="primary" onClick={() => { setSetupOpen(false); setStatus("Company brain refreshed at 08:40 IST"); }}>Use prepared digital brain <span>→</span></button></div></div>}
-    </main>
-  );
+  if (screen === "landing") return <Landing onStart={() => setScreen("studio")} />;
+  return <main className="studio-shell">
+    <aside className="rail"><button className="logo" onClick={() => setScreen("landing")}><i>i</i><span>Intent<br/><b>Studio</b></span></button><div className="workspace">NORTHSTAR GROUP <span>⌄</span></div>
+      <nav>{["Command center", "Ask the Brain", "Strategic intents", "Daily brief", "Enterprise Brain"].map(item => <button key={item} className={page === item ? "active" : ""} onClick={() => setPage(item)}><span>{item === "Command center" ? "◫" : item === "Ask the Brain" ? "✦" : item === "Strategic intents" ? "◎" : item === "Daily brief" ? "◷" : "◉"}</span>{item}</button>)}</nav>
+      <div className="rail-bottom"><div className="brain-state"><i/> <b>{status}</b><small>{sources.length} sources · governed retrieval</small></div><button className="company-settings" onClick={() => setSetup(true)}>⚙ Company setup</button><div className="user"><div>{profile.name.split(" ").map(x => x[0]).join("")}</div><span><b>{profile.name}</b><small>{profile.title}</small></span><em>⌄</em></div></div>
+    </aside>
+    <section className="canvas"><header className="top"><div><span className="kicker">{role} DIGITAL BRAIN <i/> UPDATED JUST NOW</span><h1>Good morning, {profile.name.split(" ")[0]}.</h1><p>{profile.lead}</p></div><div className="top-actions"><select aria-label="Choose AI model" value={model} onChange={e => setModel(e.target.value)}><option>GPT-5</option><option>Google Gemini 2.5 Pro</option><option>Kimi K3</option></select><button className="round">⌁</button><button className="dark-button" onClick={() => setSetup(true)}>Configure brain <b>→</b></button></div></header>
+      <div className="role-switcher"><span>Leadership lens</span>{(["CEO", "CFO", "CSO"] as Role[]).map(x => <button key={x} className={role === x ? "selected" : ""} onClick={() => { setRole(x); setPage("Command center"); setAnswer(""); }}>{x}<small>{roleData[x].title.replace("Chief ", "")}</small></button>)}</div>
+      {page === "Command center" && <Dashboard profile={profile} role={role} setPage={setPage} />}
+      {page === "Ask the Brain" && <AskBrain profile={profile} query={query} setQuery={setQuery} answer={answer} onAsk={ask} sources={sources} model={model}/>} 
+      {page === "Enterprise Brain" && <BrainPage sources={sources} onFiles={ingest} onLink={addLink} onOpenSetup={() => setSetup(true)} />}
+      {page === "Strategic intents" && <Intents profile={profile} />}
+      {page === "Daily brief" && <Brief profile={profile} />}
+    </section>
+    {setup && <Setup model={model} setModel={setModel} onFiles={ingest} onLink={addLink} onClose={() => setSetup(false)} />}
+  </main>;
 }
 
-function PageView({ page, onAsk, onStatus }: { page: string; onAsk: (value: string) => void; onStatus: (value: string) => void }) {
-  if (page === "Ask Intent Studio") return <section className="page-view ask-view"><span className="eyebrow">CEO CONVERSATION</span><h2>Ask the business anything.</h2><p>Intent Studio combines synthetic CRM and ERP signals with verified public company context.</p><div className="conversation"><div className="message user">Why is our forecast below target?</div><div className="message ai"><b>Intent Studio</b><p>South region pipeline is the principal driver of the ₹147Cr gap. Eight late-stage opportunities have a combined 41% probability of closing this quarter, versus 63% at the start of the period.</p><div className="source-tags"><span>Synthetic CRM pipeline</span><span>Synthetic ERP revenue</span><span>Public market context</span></div></div></div><div className="prompt-row"><input placeholder="Ask about revenue, pipeline, forecasts, or risks..."/><button onClick={() => onAsk("The South region is the most material forecast risk. Three executive interventions could recover ₹3.8Cr in the demo scenario.")}>Ask Intent Studio →</button></div></section>;
-  if (page === "Strategic Intents") return <section className="page-view"><div className="view-head"><div><span className="eyebrow">STRATEGY WORKSPACE</span><h2>Strategic intents</h2><p>Focus the digital brain on the outcomes that matter most.</p></div><button className="setup-button" onClick={() => onStatus("New intent workspace opened")}>+ New intent</button></div><div className="intent-grid"><article className="intent-tile selected"><span className="intent-symbol">↗</span><span className="eyebrow">ACTIVE</span><h3>Grow Sales</h3><p>Close the gap to target through pipeline quality, conversion, and deal value.</p><div><b>92.6%</b><small>forecast to target</small></div><ul><li>Improve pipeline conversion</li><li>Increase average deal value</li></ul></article><article className="intent-tile"><span className="intent-symbol amber">◈</span><span className="eyebrow">DRAFT</span><h3>Improve Profits</h3><p>Identify high-confidence margin levers across the portfolio.</p><div><b>3</b><small>opportunities identified</small></div><button onClick={() => onStatus("Improve Profits activated")}>Activate intent</button></article></div></section>;
-  if (page === "Daily Brief") return <section className="page-view"><div className="view-head"><div><span className="eyebrow">TUESDAY, 28 JULY</span><h2>Your daily CEO brief</h2><p>Three decisions deserve attention today.</p></div><button className="intent-edit" onClick={() => onStatus("Brief marked as reviewed")}>Mark reviewed</button></div><div className="brief-list">{initialActions.map((action, i) => <article className="brief-item" key={action.title}><div className={`action-index ${action.tone}`}>0{i + 1}</div><div><span className="eyebrow">{i === 0 ? "URGENT" : i === 1 ? "HIGH IMPACT" : "WATCH"}</span><h3>{action.title}</h3><p>{action.detail}</p><span className="owner">Suggested owner: {action.owner}</span></div><div className="brief-impact"><b>{action.impact}</b><small>estimated impact</small><button onClick={() => onStatus(`${action.title} accepted`)}>Accept action</button></div></article>)}</div></section>;
-  return <section className="page-view"><div className="view-head"><div><span className="eyebrow">DIGITAL BRAIN INVENTORY</span><h2>Data sources</h2><p>Every insight retains its origin and data classification.</p></div><button className="intent-edit" onClick={() => onStatus("Source refresh requested")}>Refresh public data</button></div><div className="source-table"><div className="source-row source-label"><span>Source</span><span>Type</span><span>Coverage</span><span>Last updated</span><span>Status</span></div><Source name="Salesforce-style pipeline" type="Synthetic internal" coverage="Opportunities, stages, conversion" updated="Today, 08:40 IST"/><Source name="ERP-style sales ledger" type="Synthetic internal" coverage="Revenue, orders, profitability" updated="Today, 08:40 IST"/><Source name="Accenture investor relations" type="Verified public" coverage="Earnings and investor materials" updated="28 Jul 2026"/><Source name="Industry market context" type="Verified public" coverage="Demand and growth signals" updated="26 Jul 2026"/></div><div className="lineage-note"><b>Data transparency by design</b><span>Operational records are synthetic for this demo. Public facts remain separately cited in every insight.</span></div></section>;
-}
+function Landing({ onStart }: { onStart: () => void }) { return <main className="landing"><header><button className="logo"><i>i</i><span>Intent<br/><b>Studio</b></span></button><div><a href="#roles">Leadership intelligence</a><a href="#brain">Enterprise Brain</a><button onClick={onStart}>Enter workspace <b>→</b></button></div></header><section className="hero"><div className="hero-copy"><span className="pill">THE ENTERPRISE DECISION SYSTEM</span><h1>Make every<br/><em>intention</em> count.</h1><p>IntentStudio transforms your enterprise knowledge into the focused, role-aware decisions that move a business forward.</p><div className="hero-actions"><button onClick={onStart}>Explore your digital brain <b>→</b></button><span>Built for leaders<br/><strong>CEO · CFO · CSO</strong></span></div></div><div className="hero-visual"><div className="orb orb-a"/><div className="orb orb-b"/><div className="signal-card"><span>LIVE ENTERPRISE SIGNAL</span><b>Margin expansion</b><strong>+1.2 pts</strong><small>High confidence · 7 sources</small></div><div className="line-card"><span>Strategic intent</span><b>Grow profitable revenue</b><div><i/><i/><i/><i/><i/></div></div></div></section><section className="landing-proof" id="roles"><span>ONE BRAIN. THREE LEADERSHIP LENSES.</span><div><article><b>CEO</b><p>Growth, execution and the choices that compound enterprise value.</p></article><article><b>CFO</b><p>Cash, capital and margin intelligence for decisive allocation.</p></article><article><b>CSO</b><p>Strategic bets, market whitespace and portfolio momentum.</p></article></div></section></main> }
 
-function Source({ name, type, coverage, updated }: {name: string; type: string; coverage: string; updated: string}) { return <div className="source-row"><b>{name}</b><span className={type.includes("Synthetic") ? "synthetic" : "public"}>{type}</span><span>{coverage}</span><span>{updated}</span><span className="ready">● Ready</span></div>; }
+function Dashboard({ profile, role, setPage }: { profile: typeof roleData.CEO; role: Role; setPage: (s: string) => void }) { return <><section className="intent-band"><div className="intent-icon">↗</div><div><span className="kicker">ACTIVE STRATEGIC INTENT</span><h2>{profile.intent}</h2><p>Align action around the few highest-confidence levers.</p></div><div className="intent-tags"><span>Signal strength: high</span><span>{role === "CFO" ? "Cash conversion" : role === "CSO" ? "Market adjacency" : "Enterprise conversion"}</span></div></section><section className="metric-grid">{profile.metrics.map(([label, value, change], i) => <article key={label}><span>{label}</span><b>{value}</b><small className={change.includes("↓") || change.includes("gap") || change.includes("risk") ? "warn" : ""}>{change} <em>{i === 0 ? "vs. plan" : "this quarter"}</em></small></article>)}</section><section className="dashboard"><article className="card trajectory"><div className="card-title"><div><span className="kicker">PERFORMANCE TRAJECTORY</span><h3>{role === "CFO" ? "Margin is improving — but delivery costs are rising" : role === "CSO" ? "Priority markets are accelerating — execution is uneven" : "Revenue is ahead of plan — but momentum is softening"}</h3></div><button>•••</button></div><div className="chart-labels"><span>Current</span><span>Plan</span><span>Forecast</span></div><div className="fake-chart"><i/><i/><i/><i/><i/><svg viewBox="0 0 700 230" preserveAspectRatio="none"><path d="M0 184 C42 170,65 150,110 159 S174 130,220 136 S294 92,350 111 S424 76,467 87 S535 43,574 58 S644 50,700 29"/><path className="forecast" d="M574 58 C620 66,660 88,700 78"/></svg><div className="chart-note"><b>78% confidence</b><span>Based on connected signals</span></div></div><div className="months">APR MAY JUN JUL AUG SEP OCT NOV DEC JAN FEB MAR</div></article><article className="card priorities"><div className="card-title"><div><span className="kicker">DAILY PRIORITIES</span><h3>Where to focus now</h3></div><button onClick={() => setPage("Daily brief")}>View full brief →</button></div>{profile.priorities.map((p, i) => <div className="priority" key={p}><b>0{i + 1}</b><div><strong>{p}</strong><p>{i === 0 ? "Material impact is visible in the next operating cycle." : "A high-confidence intervention is ready for review."}</p><span>Owner: {role === "CFO" ? "Finance leader" : role === "CSO" ? "Strategy lead" : "Business leader"}</span></div><button>Review</button></div>)}</article></section><section className="lower"><article className="card signal-list"><span className="kicker">EXECUTIVE SIGNALS</span><h3>What changed since yesterday</h3><div><b>01</b><p>New evidence strengthens the case for focused intervention.</p><strong>High</strong></div><div><b>02</b><p>One plan assumption requires an executive decision.</p><strong>Watch</strong></div></article><article className="ask-card"><span className="kicker">ASK INTENTSTUDIO</span><h3>What would you like to understand?</h3><p>Ask across your connected enterprise knowledge.</p><button onClick={() => setPage("Ask the Brain")}>Ask the Brain <b>→</b></button><small>Grounded answers · source citations · {role} lens</small></article></section></> }
 
-function Metric({ label, value, change, note, warning = false }: {label: string; value: string; change: string; note: string; warning?: boolean}) {
-  return <article className="metric"><span className="eyebrow">{label}</span><div className="metric-value">{value}</div><div className={warning ? "metric-change warning" : "metric-change"}>{change}<small>{note}</small></div></article>;
-}
+function AskBrain({ profile, query, setQuery, answer, onAsk, sources, model }: any) { return <section className="brain-chat"><div className="chat-intro"><span className="kicker">{profile.title.toUpperCase()} CONVERSATION</span><h2>Ask the business anything.</h2><p>IntentStudio retrieves the most relevant evidence from your Enterprise Digital Brain before it answers.</p></div><div className="suggestions">{[profile.question, "What decision should I make this week?", "What evidence changed most recently?"].map((q: string) => <button key={q} onClick={() => setQuery(q)}>{q}</button>)}</div><div className="chat-box">{answer ? <><div className="bubble user-bubble">{profile.question}</div><div className="bubble ai-bubble"><b>IntentStudio <span>Grounded answer</span></b><p>{answer}</p><div>{sources.slice(0, 3).map((s: SourceItem) => <small key={s.name}>↗ {s.name}</small>)}</div></div></> : <div className="empty-chat">Your next decision is one question away.<small>{sources.length} sources ready for retrieval · {model}</small></div>}<form onSubmit={onAsk}><input value={query} onChange={e => setQuery(e.target.value)} placeholder="Ask about strategy, performance, risk or any uploaded source…"/><button>↑</button></form></div></section> }
+function BrainPage({ sources, onFiles, onLink, onOpenSetup }: any) { const [link, setLink] = useState(""); return <section className="brain-page"><div className="page-head"><div><span className="kicker">GOVERNED KNOWLEDGE LAYER</span><h2>Enterprise Digital Brain</h2><p>Bring documents, media and websites into a single, traceable intelligence layer.</p></div><button className="dark-button" onClick={onOpenSetup}>Add sources <b>→</b></button></div><div className="upload-grid"><label className="dropzone"><input type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,audio/*,video/*" onChange={(e: ChangeEvent<HTMLInputElement>) => onFiles(e.target.files)}/><b>↑</b><strong>Drop enterprise knowledge here</strong><span>PDF, Word, Excel, audio, video and more</span></label><form className="linkbox" onSubmit={e => { e.preventDefault(); onLink(link); setLink(""); }}><span>⌁</span><strong>Connect a website</strong><input value={link} onChange={e => setLink(e.target.value)} placeholder="https://your-company.com"/><button>Add website →</button></form><div className="guardrail"><span>✦</span><b>Built for trust</b><p>Every answer retains source context, classification and retrieval trail.</p></div></div><div className="source-list"><div className="source-heading"><span>Connected source</span><span>Type</span><span>Coverage</span><span>Status</span></div>{sources.map((s: SourceItem) => <div className="source-item" key={s.name}><b>{s.name}</b><span className="source-type">{s.type}</span><span>{s.detail}</span><em className={s.status === "Ready" ? "ready" : "indexing"}>● {s.status}</em></div>)}</div></section> }
+function Intents({ profile }: any) { return <section className="generic-page"><span className="kicker">STRATEGY WORKSPACE</span><h2>Strategic intents</h2><p>Focus the digital brain on outcomes that matter most.</p><div className="intent-tiles"><article className="current"><span>ACTIVE</span><h3>{profile.intent}</h3><p>Translate enterprise context into a coordinated set of measurable actions.</p><b>78%</b><small>confidence signal</small></article><article><span>DRAFT</span><h3>Build resilient advantage</h3><p>Identify strategic choices that defend long-term performance.</p><button>Activate intent</button></article></div></section> }
+function Brief({ profile }: any) { return <section className="generic-page"><span className="kicker">TODAY'S EXECUTIVE BRIEF</span><h2>Your daily brief</h2><p>Three decisions deserve attention today.</p><div className="briefs">{profile.priorities.map((x: string, i: number) => <article key={x}><b>0{i + 1}</b><div><span>{i === 0 ? "HIGH IMPACT" : "EXECUTIVE WATCH"}</span><h3>{x}</h3><p>Evidence from the Enterprise Digital Brain points to a timely intervention.</p></div><button>Review action →</button></article>)}</div></section> }
+function Setup({ model, setModel, onFiles, onLink, onClose }: any) { const [link, setLink] = useState(""); return <div className="modal"><div className="setup"><button className="close" onClick={onClose}>×</button><span className="kicker">COMPANY SETUP</span><h2>Build your Enterprise Digital Brain</h2><p>Upload private knowledge or connect your company website. IntentStudio indexes content so answers can be grounded in your enterprise context.</p><label>Company name<input defaultValue="Northstar Group"/></label><label>Preferred model<select value={model} onChange={e => setModel(e.target.value)}><option>GPT-5</option><option>Google Gemini 2.5 Pro</option><option>Kimi K3</option></select></label><label className="setup-upload"><input type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,audio/*,video/*" onChange={(e: ChangeEvent<HTMLInputElement>) => { onFiles(e.target.files); onClose(); }}/><b>Upload files</b><span>PDF · Word · Excel · audio · video</span></label><form className="setup-link" onSubmit={e => { e.preventDefault(); onLink(link); onClose(); }}><input value={link} onChange={e => setLink(e.target.value)} placeholder="Paste a website link"/><button>Connect</button></form><small>Files are classified and indexed with source lineage for retrieval-grounded answers.</small></div></div> }
