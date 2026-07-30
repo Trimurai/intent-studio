@@ -251,8 +251,7 @@ function AccessGate({ onBack, onSuccess }: { onBack: () => void; onSuccess: () =
         <div className="access-brand"><i>i</i><span>INTENT STUDIO</span></div>
         <span className="kicker">SECURE DEMO WORKSPACE</span>
         <h1>Enter your Enterprise Digital Brain.</h1>
-        <p>Use today&apos;s password to continue. The demo password follows the format <b>Exx-NNNN</b> using your local date.</p>
-        <form onSubmit={submit}><label>Daily access password<input autoFocus type="password" value={password} onChange={(event) => { setPassword(event.target.value); setError(""); }} placeholder="Exx-NNNN" aria-invalid={Boolean(error)} /></label>{error && <div className="access-error">{error}</div>}<button>Unlock Intent Studio →</button></form>
+        <form onSubmit={submit}><label>Enter Password<input autoFocus type="password" value={password} onChange={(event) => { setPassword(event.target.value); setError(""); }} placeholder="Enter password" aria-label="Enter Password" aria-invalid={Boolean(error)} /></label>{error && <div className="access-error">{error}</div>}<button>Unlock Intent Studio →</button></form>
         <small>Demo access control · password changes daily at local midnight</small>
       </section>
     </main>
