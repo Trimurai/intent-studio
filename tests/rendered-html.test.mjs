@@ -31,7 +31,9 @@ test("server-renders the Intent Studio landing page", async () => {
 test("includes company setup, daily access, LLM and upload capabilities", async () => {
   const page = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
 
-  assert.match(page, /return `Edb-\$\{dd\}\$\{mm\}`/);
+  assert.match(page, /return `Exx-\$\{dd\}\$\{mm\}`/);
+  assert.match(page, /https:\/\/amzn\.in\/d\/0eMHieFm/);
+  assert.match(page, /admin@trimurai\.com/);
   assert.match(page, /type Role = "CEO" \| "CFO" \| "CSO" \| "CHRO"/);
   assert.match(page, /Create Digital Brain/);
   assert.match(page, /OpenAI GPT-5/);

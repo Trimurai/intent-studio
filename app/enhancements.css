@@ -1,4 +1,9 @@
 .landing-v2{background:#06162c;color:#f7fbff;overflow:hidden}
+.trimurai-bar{min-height:50px;padding:8px 7.5%;display:flex;align-items:center;justify-content:space-between;gap:24px;background:#fff;color:#18314b;position:relative;z-index:4}
+.trimurai-brand{display:flex;align-items:center;gap:10px;color:#18314b;text-decoration:none;font-size:11px;font-weight:700;white-space:nowrap}
+.trimurai-brand img{width:112px;height:32px;object-fit:contain;object-position:left center}
+.trimurai-brand span{padding-left:10px;border-left:1px solid #d8dfe7;color:#2c638a}.trimurai-brand b{color:#ff7900;font-size:13px}
+.trimurai-bar p{margin:0;font-size:11px;line-height:1.4;color:#526a7f;text-align:right}.trimurai-bar p strong{color:#18314b}.trimurai-bar p a{color:#0c6cb5;font-weight:700;text-decoration:none}
 .landing-v2 header{background:#06162ce8;backdrop-filter:blur(16px);position:relative;z-index:3}
 .landing-v2 .logo i,.access-brand i{background:#ffd400;color:#06162c}
 .landing-v2 header button:not(.logo),.landing-v2 .hero-actions button{background:#ffd400;color:#06162c;border-radius:4px}
@@ -15,7 +20,9 @@
 .trust-row span{padding-left:12px;border-left:1px solid #ffd40066}
 .trust-row b{display:block;color:#fff;font-size:11px;margin-top:4px;letter-spacing:0}
 .brain-story{max-width:1260px;margin:0 auto 80px;padding:34px;background:#0d263b;display:grid;grid-template-columns:340px 1fr;gap:54px;align-items:center;border:1px solid #1f526a;border-radius:20px;box-shadow:0 28px 70px #0006}
-.brain-story>img{width:100%;max-height:430px;object-fit:cover;object-position:50% 46%;border-radius:12px}
+.book-purchase{position:relative}.book-purchase img{width:100%;max-height:430px;object-fit:cover;object-position:50% 46%;border-radius:12px;display:block}
+.book-purchase a{display:flex;flex-direction:column;gap:3px;margin-top:12px;padding:13px 15px;border-radius:8px;background:#ffd400;color:#06162c;text-decoration:none;box-shadow:0 9px 24px #0004;transition:transform .2s ease,background .2s ease}.book-purchase a:hover{transform:translateY(-2px);background:#ffe044}
+.book-purchase a span{font-size:9px;font-weight:bold;letter-spacing:1.1px}.book-purchase a b{font-size:14px}.book-purchase a em{font-style:normal;float:right;margin-left:9px}
 .brain-story>div>span{font-size:10px;letter-spacing:2px;color:#ffd400;font-weight:bold}
 .brain-story h2{font:500 clamp(34px,4vw,58px)/1.02 Georgia;margin:17px 0;color:#fff}
 .brain-story p{max-width:710px;color:#b8ccda;font-size:15px;line-height:1.7}
@@ -70,6 +77,7 @@
   .brain-story{margin-left:24px;margin-right:24px}
 }
 @media(max-width:900px){
+  .trimurai-bar{padding:10px 24px;align-items:flex-start;flex-direction:column;gap:6px}.trimurai-bar p{text-align:left}
   .landing-v2 .landing-proof>div,.trend-grid{grid-template-columns:1fr 1fr}
   .brain-story{grid-template-columns:1fr}
   .brain-story>img{max-height:360px}

@@ -80,7 +80,7 @@ function todayAccessCode() {
   const now = new Date();
   const dd = String(now.getDate()).padStart(2, "0");
   const mm = String(now.getMonth() + 1).padStart(2, "0");
-  return `Edb-${dd}${mm}`;
+  return `Exx-${dd}${mm}`;
 }
 
 export default function Home() {
@@ -206,6 +206,13 @@ export default function Home() {
 function Landing({ onStart }: { onStart: () => void }) {
   return (
     <main className="landing landing-v2">
+      <div className="trimurai-bar">
+        <a className="trimurai-brand" href="https://trimurai.com" target="_blank" rel="noreferrer" aria-label="Visit Trimurai Solutions">
+          <img src="/trimurai-logo.png" alt="Trimurai Solutions" />
+          <span>trimurai.com <b>↗</b></span>
+        </a>
+        <p><strong>Contact us:</strong> To know more details, write to <a href="mailto:admin@trimurai.com">admin@trimurai.com</a> with your name, company, purpose and contact details.</p>
+      </div>
       <header>
         <button className="logo"><i>i</i><span>Intent<br /><b>Studio</b></span></button>
         <div><a href="#digital-brain">Enterprise Digital Brain</a><a href="#leadership">Leadership lenses</a><button onClick={onStart}>Enter Intent Studio <b>→</b></button></div>
@@ -221,7 +228,7 @@ function Landing({ onStart }: { onStart: () => void }) {
         <div className="hero-art"><img src="/intent-banner.png" alt="Intent: building human-led autonomous enterprises in the age of AI" /></div>
       </section>
       <section className="brain-story" id="digital-brain">
-        <img src="/intent-cover.jpg" alt="Intent book and the next era of intelligence" />
+        <div className="book-purchase"><img src="/intent-cover.jpg" alt="Intent book and the next era of intelligence" /><a href="https://amzn.in/d/0eMHieFm" target="_blank" rel="noreferrer"><span>AVAILABLE ON AMAZON</span><b>Get the book <em>→</em></b></a></div>
         <div><span>THE MANAGEMENT INTELLIGENCE LAYER</span><h2>Purpose in. Intelligence at work. Outcomes out.</h2><p>Your Enterprise Digital Brain brings together company systems, trusted public information and leadership intent—then converts them into focused questions, transparent evidence and actions.</p><div className="story-points"><b>Human intent<small>Defines purpose and outcomes</small></b><b>AI execution<small>Retrieves, reasons and adapts</small></b><b>Enterprise outcomes<small>Creates continuous value</small></b></div></div>
       </section>
       <section className="landing-proof" id="leadership"><span>ONE ENTERPRISE DIGITAL BRAIN. FOUR LEADERSHIP LENSES.</span><div>{(["CEO", "CFO", "CSO", "CHRO"] as Role[]).map((item) => <article key={item}><b>{item}</b><p>{item === "CEO" ? "Growth, execution and enterprise value." : item === "CFO" ? "Cash, capital and profitable performance." : item === "CSO" ? "Market shifts, strategic bets and advantage." : "Skills, leaders and workforce capacity."}</p></article>)}</div></section>
@@ -244,8 +251,8 @@ function AccessGate({ onBack, onSuccess }: { onBack: () => void; onSuccess: () =
         <div className="access-brand"><i>i</i><span>INTENT STUDIO</span></div>
         <span className="kicker">SECURE DEMO WORKSPACE</span>
         <h1>Enter your Enterprise Digital Brain.</h1>
-        <p>Use today&apos;s password to continue. The demo password follows the format <b>Edb-DDMM</b> using your local date.</p>
-        <form onSubmit={submit}><label>Daily access password<input autoFocus type="password" value={password} onChange={(event) => { setPassword(event.target.value); setError(""); }} placeholder="Edb-DDMM" aria-invalid={Boolean(error)} /></label>{error && <div className="access-error">{error}</div>}<button>Unlock Intent Studio →</button></form>
+        <p>Use today&apos;s password to continue. The demo password follows the format <b>Exx-NNNN</b> using your local date.</p>
+        <form onSubmit={submit}><label>Daily access password<input autoFocus type="password" value={password} onChange={(event) => { setPassword(event.target.value); setError(""); }} placeholder="Exx-NNNN" aria-invalid={Boolean(error)} /></label>{error && <div className="access-error">{error}</div>}<button>Unlock Intent Studio →</button></form>
         <small>Demo access control · password changes daily at local midnight</small>
       </section>
     </main>
