@@ -25,7 +25,7 @@ test("server-renders the Intent Studio landing page", async () => {
   assert.match(html, /Enterprise Digital Brain/);
   assert.match(html, /Human intent/);
   assert.match(html, /CEO · CFO · CSO · CHRO/);
-  assert.match(html, /intent-banner\.png/);
+  assert.match(html, /intent-framework-banner\.png/);
 });
 
 test("includes company setup, daily access, LLM and upload capabilities", async () => {

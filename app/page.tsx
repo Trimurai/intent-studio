@@ -225,7 +225,7 @@ function Landing({ onStart }: { onStart: () => void }) {
           <div className="hero-actions"><button onClick={onStart}>Enter the studio <b>→</b></button><span>Built for leaders<br /><strong>CEO · CFO · CSO · CHRO</strong></span></div>
           <div className="trust-row"><span>01<br /><b>Human-led</b></span><span>02<br /><b>Grounded in evidence</b></span><span>03<br /><b>Action-oriented</b></span></div>
         </div>
-        <div className="hero-art"><img src="/intent-banner.png" alt="Intent: building human-led autonomous enterprises in the age of AI" /></div>
+        <div className="hero-art"><img src="/intent-framework-banner.png" alt="Intent framework for human-led autonomous enterprises in the age of AI" /></div>
       </section>
       <section className="brain-story" id="digital-brain">
         <div className="book-purchase"><img src="/intent-cover.jpg" alt="Intent book and the next era of intelligence" /><a href="https://amzn.in/d/0eMHieFm" target="_blank" rel="noreferrer"><span>AVAILABLE ON AMAZON</span><b>Get the book <em>→</em></b></a></div>

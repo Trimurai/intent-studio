@@ -7,14 +7,14 @@
 .landing-v2 header{background:#06162ce8;backdrop-filter:blur(16px);position:relative;z-index:3}
 .landing-v2 .logo i,.access-brand i{background:#ffd400;color:#06162c}
 .landing-v2 header button:not(.logo),.landing-v2 .hero-actions button{background:#ffd400;color:#06162c;border-radius:4px}
-.hero-v2{max-width:1500px;min-height:690px;padding-top:70px;grid-template-columns:.8fr 1.2fr;gap:44px;position:relative}
+.hero-v2{max-width:1500px;min-height:690px;padding-top:70px;grid-template-columns:1fr;gap:40px;position:relative}
 .hero-v2:before{content:"";position:absolute;width:700px;height:700px;right:-110px;top:-230px;background:radial-gradient(circle,#097be888 0,transparent 67%);pointer-events:none}
-.hero-v2 .hero-copy{position:relative;z-index:1}
+.hero-v2 .hero-copy{position:relative;z-index:1;max-width:830px}
 .hero-v2 .pill{border-color:#ffd40066;color:#ffd400;background:#ffd4000b}
 .hero-v2 h1{font-family:Arial,sans-serif;font-weight:800;font-size:clamp(48px,5.4vw,86px);letter-spacing:-3px;line-height:.96;margin:28px 0 24px}
 .hero-v2 h1 em{font-family:Georgia,serif;font-weight:500;color:#ffd400;letter-spacing:-2px}
 .hero-v2 .hero-copy>p{font-size:18px;color:#b8cee7;max-width:590px}
-.hero-art{position:relative;z-index:1;padding:10px;background:linear-gradient(135deg,#0b3261,#0b1830);border:1px solid #288bdb55;border-radius:18px;box-shadow:0 40px 90px #000b}
+.hero-art{position:relative;z-index:1;padding:10px;background:linear-gradient(135deg,#0b3261,#0b1830);border:1px solid #288bdb55;border-radius:18px;box-shadow:0 40px 90px #000b;max-width:1260px}
 .hero-art img{display:block;width:100%;border-radius:11px}
 .trust-row{display:flex;gap:24px;margin-top:38px;color:#62bfff;font-size:10px;letter-spacing:1px}
 .trust-row span{padding-left:12px;border-left:1px solid #ffd40066}
@@ -72,7 +72,7 @@
 .trend-grid a{font-size:9px;color:#77c8f7;text-decoration:none}
 
 @media(max-width:1100px){
-  .hero-v2{grid-template-columns:1fr;padding-top:55px}
+  .hero-v2{padding-top:55px}
   .hero-art{max-width:900px}
   .brain-story{margin-left:24px;margin-right:24px}
 }
