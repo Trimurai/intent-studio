@@ -1,0 +1,86 @@
+.landing-v2{background:#06162c;color:#f7fbff;overflow:hidden}
+.landing-v2 header{background:#06162ce8;backdrop-filter:blur(16px);position:relative;z-index:3}
+.landing-v2 .logo i,.access-brand i{background:#ffd400;color:#06162c}
+.landing-v2 header button:not(.logo),.landing-v2 .hero-actions button{background:#ffd400;color:#06162c;border-radius:4px}
+.hero-v2{max-width:1500px;min-height:690px;padding-top:70px;grid-template-columns:.8fr 1.2fr;gap:44px;position:relative}
+.hero-v2:before{content:"";position:absolute;width:700px;height:700px;right:-110px;top:-230px;background:radial-gradient(circle,#097be888 0,transparent 67%);pointer-events:none}
+.hero-v2 .hero-copy{position:relative;z-index:1}
+.hero-v2 .pill{border-color:#ffd40066;color:#ffd400;background:#ffd4000b}
+.hero-v2 h1{font-family:Arial,sans-serif;font-weight:800;font-size:clamp(48px,5.4vw,86px);letter-spacing:-3px;line-height:.96;margin:28px 0 24px}
+.hero-v2 h1 em{font-family:Georgia,serif;font-weight:500;color:#ffd400;letter-spacing:-2px}
+.hero-v2 .hero-copy>p{font-size:18px;color:#b8cee7;max-width:590px}
+.hero-art{position:relative;z-index:1;padding:10px;background:linear-gradient(135deg,#0b3261,#0b1830);border:1px solid #288bdb55;border-radius:18px;box-shadow:0 40px 90px #000b}
+.hero-art img{display:block;width:100%;border-radius:11px}
+.trust-row{display:flex;gap:24px;margin-top:38px;color:#62bfff;font-size:10px;letter-spacing:1px}
+.trust-row span{padding-left:12px;border-left:1px solid #ffd40066}
+.trust-row b{display:block;color:#fff;font-size:11px;margin-top:4px;letter-spacing:0}
+.brain-story{max-width:1260px;margin:0 auto 80px;padding:34px;background:#0d263b;display:grid;grid-template-columns:340px 1fr;gap:54px;align-items:center;border:1px solid #1f526a;border-radius:20px;box-shadow:0 28px 70px #0006}
+.brain-story>img{width:100%;max-height:430px;object-fit:cover;object-position:50% 46%;border-radius:12px}
+.brain-story>div>span{font-size:10px;letter-spacing:2px;color:#ffd400;font-weight:bold}
+.brain-story h2{font:500 clamp(34px,4vw,58px)/1.02 Georgia;margin:17px 0;color:#fff}
+.brain-story p{max-width:710px;color:#b8ccda;font-size:15px;line-height:1.7}
+.story-points{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:26px}
+.story-points b{color:#ffd400;border-top:1px solid #2b6380;padding-top:14px}
+.story-points small{display:block;color:#a8bdc9;font-weight:normal;margin-top:7px;line-height:1.4}
+.landing-v2 .landing-proof{background:#071d35;color:#fff;border-top:1px solid #174362}
+.landing-v2 .landing-proof>span{color:#60baf5}
+.landing-v2 .landing-proof>div{grid-template-columns:repeat(4,1fr);max-width:1260px}
+.landing-v2 .landing-proof article{border-color:#ffd40066}
+.landing-v2 .landing-proof p{color:#afc6d8}
+
+.access-screen{min-height:100vh;background:radial-gradient(circle at 75% 10%,#0c69b9 0,transparent 35%),#06162c;color:#fff;display:grid;place-items:center;padding:28px;position:relative}
+.access-screen:after{content:"ENTERPRISE DIGITAL BRAIN";position:absolute;right:-110px;bottom:60px;font:bold 90px/1 Arial;color:#ffffff06;transform:rotate(-90deg)}
+.access-back{position:absolute;left:28px;top:24px;background:none;border:0;color:#b9cde1;cursor:pointer}
+.access-panel{width:min(510px,100%);background:#0a223dbf;border:1px solid #438cc455;border-radius:18px;padding:44px;backdrop-filter:blur(18px);box-shadow:0 30px 100px #0008;position:relative;z-index:1}
+.access-brand{display:flex;align-items:center;gap:10px;color:#ffd400;font-size:11px;font-weight:bold;letter-spacing:2px;margin-bottom:38px}
+.access-brand i{display:grid;place-items:center;width:34px;height:34px;border-radius:8px;font:bold italic 26px Georgia}
+.access-panel .kicker{color:#68baf4}
+.access-panel h1{font:500 46px/1.05 Georgia;margin:14px 0}
+.access-panel>p{color:#aec4d8;line-height:1.6;font-size:13px}
+.access-panel form{display:block;margin-top:28px}
+.access-panel label{font-size:11px;color:#cfe0ed;font-weight:bold}
+.access-panel input{display:block;width:100%;margin-top:8px;background:#06172b;border:1px solid #346389;color:#fff;border-radius:7px;padding:14px;outline:0}
+.access-panel input:focus{border-color:#ffd400}
+.access-panel form>button{width:100%;border:0;border-radius:6px;background:#ffd400;color:#06162c;padding:14px;margin-top:13px;font-weight:bold;cursor:pointer}
+.access-panel>small{display:block;margin-top:18px;color:#7795ad;font-size:9px}
+.access-error{color:#ff9a87;font-size:11px;margin-top:9px}
+
+.setup-v2{width:min(650px,94vw);max-height:92vh;overflow:auto}
+.company-form{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:20px}
+.company-form label{margin:0}
+.company-form .setup-upload{grid-column:1/-1}
+.company-form .setup-upload em{display:block;color:#168363;font-size:10px;font-style:normal;margin-top:7px}
+.create-brain{grid-column:1/-1;border:0;background:#103938;color:#fff;border-radius:7px;padding:13px;font-weight:bold;cursor:pointer}
+.market-trends{margin-top:16px;padding:20px;background:#071f34;color:#eaf6ff;border-radius:11px}
+.market-head{display:flex;align-items:flex-start;justify-content:space-between}
+.market-head .kicker{color:#5ebaf4}
+.market-head h3{font:500 22px Georgia;margin:7px 0 17px}
+.public-badge{font-size:9px;color:#ffd400;border:1px solid #ffd40066;border-radius:20px;padding:6px 9px}
+.trend-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.trend-grid article{background:#0d2a43;border:1px solid #235277;border-radius:8px;padding:16px}
+.trend-grid article>span{font-size:8px;letter-spacing:1.4px;color:#65bdf4}
+.trend-grid article>b{display:block;color:#ffd400;font:500 28px Georgia;margin:10px 0 3px}
+.trend-grid h4{margin:0;font-size:13px}
+.trend-grid p{color:#a9c1d3;font-size:10px;line-height:1.55;min-height:48px}
+.trend-grid a{font-size:9px;color:#77c8f7;text-decoration:none}
+
+@media(max-width:1100px){
+  .hero-v2{grid-template-columns:1fr;padding-top:55px}
+  .hero-art{max-width:900px}
+  .brain-story{margin-left:24px;margin-right:24px}
+}
+@media(max-width:900px){
+  .landing-v2 .landing-proof>div,.trend-grid{grid-template-columns:1fr 1fr}
+  .brain-story{grid-template-columns:1fr}
+  .brain-story>img{max-height:360px}
+}
+@media(max-width:620px){
+  .hero-v2 h1{letter-spacing:-2px}
+  .hero-art{padding:5px}
+  .trust-row,.story-points{display:grid;grid-template-columns:1fr}
+  .landing-v2 .landing-proof>div,.trend-grid,.company-form{grid-template-columns:1fr}
+  .company-form .setup-upload,.create-brain{grid-column:auto}
+  .brain-story{padding:18px;gap:25px}
+  .access-panel{padding:30px 22px}
+  .access-panel h1{font-size:38px}
+}

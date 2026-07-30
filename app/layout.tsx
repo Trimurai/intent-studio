@@ -1,19 +1,20 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "./extra.css";
+import "./enhancements.css";
 
 export const metadata: Metadata = {
-  title: "IntentStudio | Enterprise Decision Intelligence",
-  description: "A role-aware Enterprise Digital Brain for decisive leadership.",
+  title: "Intent Studio | Enterprise Digital Brain",
+  description: "A human-led Enterprise Digital Brain for decisive leadership.",
   openGraph: {
-    title: "IntentStudio | Make every intention count.",
-    description: "Turn enterprise knowledge into focused, grounded decisions.",
-    images: ["/og.png"],
+    title: "Intent Studio | Enterprise Digital Brain",
+    description: "Human intent. AI execution. Enterprise outcomes.",
+    images: ["/intent-banner.png"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Intent Studio | The CEO Digital Brain",
-    images: ["/og.png"],
+    title: "Intent Studio | Enterprise Digital Brain",
+    images: ["/intent-banner.png"],
   },
 };
 
