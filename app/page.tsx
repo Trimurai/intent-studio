@@ -80,7 +80,7 @@ function todayAccessCode() {
   const now = new Date();
   const dd = String(now.getDate()).padStart(2, "0");
   const mm = String(now.getMonth() + 1).padStart(2, "0");
-  return `Exx-${dd}${mm}`;
+  return `Edb-${dd}${mm}`;
 }
 
 export default function Home() {
